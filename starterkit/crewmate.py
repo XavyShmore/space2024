@@ -1,3 +1,5 @@
+import math
+
 from orders.order import Order
 from game_message import CrewMember
 from actions import CrewMoveAction
@@ -25,9 +27,15 @@ class Crewmate:
     def has_action(self) -> bool:
         return self.current_order is not None
 
+    def distance_between_vectors(self, vector1, vector2):
+        distance = math.sqrt((vector2.x - vector1.x) ** 2 + (vector2.y - vector1.y) ** 2)
+        return distance
+
     def do(self):
-        if self.crew_member.gridPosition.x != self.current_order.station.gridPosition.x and \
-                self.crew_member.gridPosition.y != self.current_order.station.gridPosition.y:
+        # if int(self.crew_member.gridPosition.x) != int(self.current_order.station.gridPosition.x) and \
+        #         int(self.crew_member.gridPosition.y) != int(self.current_order.station.gridPosition.y):
+        dst = self.distance_between_vectors(self.crew_member.gridPosition, self.current_order.station.gridPosition)
+        if dst > 4.15:
             return CrewMoveAction(self.crew_member.id, self.current_order.station.gridPosition)
 
         return self.current_order.execute()
