@@ -7,6 +7,8 @@ from dispatcher_v2 import DispatcherV2
 class Bot:
 
     priority_queue = []
+    last_tick_the_radar_was_used = 0
+    still_alive_players_set = set()
 
     most_recent_game_state = None
 
@@ -17,6 +19,7 @@ class Bot:
 
         self.dispatcher_v2 = DispatcherV2()
         self.crewmates = []
+        self.last_tick_the_radar_was_used = 0
 
         print("Initializing your super mega duper bot")
 
