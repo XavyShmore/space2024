@@ -38,13 +38,14 @@ class Dispatcher:
             npc, turret = self.get_nearest_npc_and_station(StationEnum.TURRETS)
 
             if priority.targetType == TypeOfTarget.SHIP:
-                npc.set_order(OrderFire(self.game_message.ships[self.game_message.currentTeamId].stations.turrets[0],
+                npc.set_order(OrderFire(turret,
                                  self.game_message.ships[priority.targetID].worldPosition))
             else:
                 for d in self.game_message.debris:
                     if d.id == priority.targetID:
-                        npc.set_order(OrderFire(self.game_message.ships[self.game_message.currentTeamId].stations.turrets[0],
+                        npc.set_order(OrderFire(turret,
                                          self.game_message.debris[priority.targetID].position))
+            if
 
     def get_npc(self, dispatch_orders):
         for npc in self._crewmates:
@@ -93,7 +94,8 @@ class Dispatcher:
         return False
 
     def target_has_lot_of_shield(self, targetID):
-        self.game_message[]
+        #self.game_message[]
+        pass
 
     def get_station_from_id(self, id, stationType):
         if stationType == StationEnum.SHIELDS:
