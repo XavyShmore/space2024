@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from starterkit.game_message import Station
+from game_message import Station
 
 
 class Order(ABC):

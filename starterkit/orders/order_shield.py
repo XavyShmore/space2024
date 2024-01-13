@@ -1,5 +1,5 @@
-from starterkit.game_message import Station
-from starterkit.orders.order import Order
+from game_message import Station
+from orders.order import Order
 
 
 class OrderShield(Order):

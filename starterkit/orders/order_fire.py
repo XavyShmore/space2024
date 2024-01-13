@@ -1,7 +1,7 @@
-from starterkit.orders.order import Order
-from starterkit.game_message import Vector, TurretStation, TurretType
-from starterkit.actions import TurretShootAction, TurretLookAtAction
-from starterkit.math import Math
+from  orders.order import Order
+from  game_message import Vector, TurretStation, TurretType
+from  actions import TurretShootAction, TurretLookAtAction
+import math
 
 
 class OrderFire(Order):
@@ -13,7 +13,7 @@ class OrderFire(Order):
         self.target_position = target_position
 
     def __is_aligned(self) -> bool:
-        angle: float = Math.angle_between_vectors(self.station.worldPosition, self.target_position)
+        angle: float = math.angle_between_vectors(self.station.worldPosition, self.target_position)
         return self.station.orientationDegrees - self.ALIGNED_OFFSET < angle < self.station.orientationDegrees + self.ALIGNED_OFFSET
 
     def execute(self):
@@ -23,4 +23,5 @@ class OrderFire(Order):
             return TurretLookAtAction(target=self.target_position, stationId=self.station.id)
 
         if self.__is_aligned():
-            return TurretShootAction(stationId=self.station.id)
+            if self.station.cooldown == 0:
+                return TurretShootAction(stationId=self.station.id)

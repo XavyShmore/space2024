@@ -1,5 +1,5 @@
-from starterkit.game_message import RadarStation
-from starterkit.orders.order import Order
+from game_message import RadarStation
+from orders.order import Order
 
 
 class OrderScan(Order):

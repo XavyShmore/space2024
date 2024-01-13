@@ -1,17 +1,15 @@
 from typing import List
 
-from starterkit.actions_possibles import recharge_shields, PossibleAction, shoot
-from starterkit.crewmate import Crewmate
-from starterkit.game_message import CrewDistance, GameMessage, TurretStation
-from starterkit.orders.order_fire import OrderFire
-from starterkit.orders.order_shield import OrderShield
-from starterkit.station_enum import StationEnum
-from starterkit.type_of_target import TypeOfTarget
+from  actions_possibles import recharge_shields
+from  crewmate import Crewmate
+from  game_message import CrewDistance, GameMessage
+from  orders.order_shield import OrderShield
+from  station_enum import StationEnum
 
 
 class Dispatcher:
-    def __init__(self, crewmates):
-        self._crewmates = crewmates
+    def __init__(self):
+        self._crewmates = []
         self.game_message: GameMessage = None
         self.usID = self.game_message.currentTeamId
         self.dispatch_orders = {}
