@@ -108,8 +108,8 @@ class shoot(PossibleAction):
 
 
         for ship in game_message.ships:
-            print(ship)
-            print(game_message.currentTeamId)
+            #print(ship)
+            #print(game_message.currentTeamId)
             if ship != game_message.currentTeamId:
                 self.targetID = ship
                 self.targetType = "ship"
