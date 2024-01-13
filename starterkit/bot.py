@@ -7,8 +7,9 @@ class Bot:
 
     priority_queue = []
 
+    most_recent_game_state = None
+
     def __init__(self):
-        self.priority_queue.append(rotate_ship(self))
         self.priority_queue.append(recharge_shields(self))
         self.priority_queue.append(recharge_turrets(self))
         self.priority_queue.append(shoot(self))
@@ -19,6 +20,10 @@ class Bot:
 
 
     def get_next_move(self, game_message: GameMessage):
+
+        print("Starting to think about my next move")
         for action in self.priority_queue:
-            action.update_priority()
+            action.update_priority(game_message)
         self.priority_queue.sort(key=lambda x: x.priority)
+
+
