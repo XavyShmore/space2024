@@ -106,6 +106,7 @@ class shoot(PossibleAction):
             if ship != game_message.currentTeamId:
                 self.targetID = ship
                 self.targetType = TypeOfTarget.SHIP
+                self.priority = 40
                 break
 
 class use_radar(PossibleAction):
