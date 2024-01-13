@@ -25,8 +25,10 @@ class Crewmate:
     def has_action(self) -> bool:
         return self.current_order is not None
 
+
     def do(self):
-        if self.crew_member.gridPosition is not self.current_order.station.gridPosition:
+        if self.crew_member.gridPosition.x != self.current_order.station.gridPosition.x and \
+                self.crew_member.gridPosition.y != self.current_order.station.gridPosition.y:
             return CrewMoveAction(self.crew_member.id, self.current_order.station.gridPosition)
 
         return self.current_order.execute()

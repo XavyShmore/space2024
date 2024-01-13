@@ -23,4 +23,5 @@ class OrderFire(Order):
             return TurretLookAtAction(target=self.target_position, stationId=self.station.id)
 
         if self.__is_aligned():
-            return TurretShootAction(stationId=self.station.id)
+            if self.station.cooldown == 0:
+                return TurretShootAction(stationId=self.station.id)

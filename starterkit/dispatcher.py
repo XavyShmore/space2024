@@ -10,8 +10,8 @@ from starterkit.type_of_target import TypeOfTarget
 
 
 class Dispatcher:
-    def __init__(self, crewmates):
-        self._crewmates = crewmates
+    def __init__(self):
+        self._crewmates = []
         self.game_message: GameMessage = None
         self.usID = self.game_message.currentTeamId
         self.dispatch_orders = {}
@@ -93,7 +93,8 @@ class Dispatcher:
         return False
 
     def target_has_lot_of_shield(self, targetID):
-        self.game_message[]
+        # self.game_message[]
+        pass
 
     def get_station_from_id(self, id, stationType):
         if stationType == StationEnum.SHIELDS:
