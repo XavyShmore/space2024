@@ -1,6 +1,7 @@
 from abc import ABC, abstractmethod
 import math
 from type_of_action import TypeOfAction
+from type_of_target import TypeOfTarget
 
 
 class PossibleAction(ABC):
@@ -103,8 +104,8 @@ class shoot(PossibleAction):
             debris_radius = debris.radius
 
             if distance_between_line_and_point(station_position, debris_velocity, debris_position) < ship_radius + debris_radius:
-                self.targetID = debris.id
-                self.targetType = "debris"
+                self.targetID = debris
+                self.targetType = TypeOfTarget.DEBRIS
                 self.priority = 45
                 break
 
