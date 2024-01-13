@@ -63,8 +63,10 @@ class shoot(PossibleAction):
     def update_priority(self, game_message):
         priority = 30
 
-        station_position = game_message.shipsPosition[game_message.currentTeamId]
-        ship_radius = game_message.ships[game_message.currentTeamId].radius
+        station_position = game_message.shipsPositions[game_message.currentTeamId]
+
+        #print(game_message)
+        ship_radius = 100
 
         def distance_between_line_and_point(point1, line_vector, line_point):
             #calculate distance between station and debris trajectory line
@@ -106,8 +108,10 @@ class shoot(PossibleAction):
 
 
         for ship in game_message.ships:
-            if ship.teamId != game_message.currentTeamId:
-                self.targetID = ship.id
+            #print(ship)
+            #print(game_message.currentTeamId)
+            if ship != game_message.currentTeamId:
+                self.targetID = ship
                 self.targetType = "ship"
                 break
 
