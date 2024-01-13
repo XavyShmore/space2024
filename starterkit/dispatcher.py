@@ -3,6 +3,7 @@ from typing import List
 from starterkit.actions_possibles import recharge_shields, PossibleAction, shoot
 from starterkit.crewmate import Crewmate
 from starterkit.game_message import CrewDistance, GameMessage, TurretStation
+from starterkit.orders.order_fire import OrderFire
 from starterkit.orders.order_shield import OrderShield
 from starterkit.station_enum import StationEnum
 from starterkit.type_of_target import TypeOfTarget
@@ -34,10 +35,16 @@ class Dispatcher:
             self.dispatch_orders[npc] = priority
 
         if isinstance(priority, shoot):
-            turret:TurretStation = self.get_nearest_npc_and_station(StationEnum.TURRETS)
+            npc, turret = self.get_nearest_npc_and_station(StationEnum.TURRETS)
 
-
-
+            if priority.targetType == TypeOfTarget.SHIP:
+                npc.set_order(OrderFire(self.game_message.ships[self.game_message.currentTeamId].stations.turrets[0],
+                                 self.game_message.ships[priority.targetID].worldPosition))
+            else:
+                for d in self.game_message.debris:
+                    if d.id == priority.targetID:
+                        npc.set_order(OrderFire(self.game_message.ships[self.game_message.currentTeamId].stations.turrets[0],
+                                         self.game_message.debris[priority.targetID].position))
 
     def get_npc(self, dispatch_orders):
         for npc in self._crewmates:
