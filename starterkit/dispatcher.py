@@ -1,12 +1,12 @@
 from typing import List
 
 from actions_possibles import recharge_shields, shoot, PossibleAction
-from  crewmate import Crewmate
+from crewmate import Crewmate
 from game_message import CrewDistance, GameMessage, TurretStation
-from  orders.order_shield import OrderShield
+from orders.order_shield import OrderShield
 from starterkit.orders.order_fire import OrderFire
 from starterkit.type_of_target import TypeOfTarget
-from  station_enum import StationEnum
+from station_enum import StationEnum
 
 
 class Dispatcher:
@@ -24,29 +24,24 @@ class Dispatcher:
         self.dispatch(priorities, game_message)
 
     def dispatch(self, priorities: List[PossibleAction], game_message):
-        # Get Priority
-        priority = next(iter(priorities), None)
 
-        if priority is None:
-            return
+        for priority in priorities:
+            if isinstance(priority, recharge_shields):
+                npc, station = self.get_nearest_npc_and_station(StationEnum.SHIELDS)
+                npc.set_order(OrderShield(station))
+                self.dispatch_orders[npc] = priority
 
-        if isinstance(priority, recharge_shields):
-            npc, station = self.get_nearest_npc_and_station(StationEnum.SHIELDS)
-            npc.set_order(OrderShield(station))
-            self.dispatch_orders[npc] = priority
+            if isinstance(priority, shoot):
+                npc, turret = self.get_nearest_npc_and_station(StationEnum.TURRETS)
 
-        if isinstance(priority, shoot):
-            npc, turret = self.get_nearest_npc_and_station(StationEnum.TURRETS)
-
-            if priority.targetType == TypeOfTarget.SHIP:
-                npc.set_order(OrderFire(turret,
-                                 self.game_message.ships[priority.targetID].worldPosition))
-            else:
-                for d in self.game_message.debris:
-                    if d.id == priority.targetID:
-                        npc.set_order(OrderFire(turret,
-                                         self.game_message.debris[priority.targetID].position))
-            
+                if priority.targetType == TypeOfTarget.SHIP:
+                    npc.set_order(OrderFire(turret,
+                                            self.game_message.ships[priority.targetID].worldPosition))
+                else:
+                    for d in self.game_message.debris:
+                        if d.id == priority.targetID:
+                            npc.set_order(OrderFire(turret,
+                                                    self.game_message.debris[priority.targetID].position))
 
     def get_npc(self, dispatch_orders):
         for npc in self._crewmates:
@@ -80,13 +75,10 @@ class Dispatcher:
                 near = station
         return near
 
-    def get_optimal_turret(self, prio:shoot):
+    def get_optimal_turret(self, prio: shoot):
         if prio.targetType is TypeOfTarget.SHIP:
-            if(self.target_has_lot_of_shield(prio.targetID)):
+            if (self.target_has_lot_of_shield(prio.targetID)):
                 pass
-
-
-
 
     def has_turretType(self, TurretType):
         for station in self.turrets:
@@ -95,7 +87,7 @@ class Dispatcher:
         return False
 
     def target_has_lot_of_shield(self, targetID):
-        #self.game_message[]
+        # self.game_message[]
         pass
 
     def get_station_from_id(self, id, stationType):
