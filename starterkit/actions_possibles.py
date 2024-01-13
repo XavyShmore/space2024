@@ -24,17 +24,19 @@ class recharge_shields(PossibleAction):
     def do_action(self):
         pass
     def update_priority(self, game_message):
-        priority = 25
+        self.priority = 25
         
         team_id = game_message.currentTeamId
 
         shield = game_message.ships[team_id].currentShield
         health = game_message.ships[team_id].currentHealth
-
+    
         if shield < 100:
-            priority = 50
+            self.priority = 50
+        elif shield > 150:
+            self.priority = 10
         if health < 50:
-            priority *= 1.5
+            self.priority *= 1.5
 
 class recharge_turrets(PossibleAction):
     priority = 0
@@ -61,7 +63,7 @@ class shoot(PossibleAction):
     def do_action(self):
         pass
     def update_priority(self, game_message):
-        priority = 30
+        self.priority = 30
 
         station_position = game_message.shipsPositions[game_message.currentTeamId]
 
@@ -125,6 +127,6 @@ class use_radar(PossibleAction):
     def do_action(self):
         pass
     def update_priority(self, game_message):
-        priority = 20
+        self.priority = 20
 
 
