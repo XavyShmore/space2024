@@ -41,18 +41,6 @@ class recharge_shields(PossibleAction):
         if health < 50:
             self.priority *= 1.5
 
-class recharge_turrets(PossibleAction):
-    priority = 0
-    type_of_action = TypeOfAction.RECHARGE_TURRET
-
-    def __init__(self, bot):
-        self.bot = bot
-    
-    def do_action(self):
-        pass
-    def update_priority(self, game_message):
-        priority = 0
-
 
 class shoot(PossibleAction):
     priority = 0
@@ -117,7 +105,7 @@ class shoot(PossibleAction):
             #print(game_message.currentTeamId)
             if ship != game_message.currentTeamId:
                 self.targetID = ship
-                self.targetType = "ship"
+                self.targetType = TypeOfTarget.SHIP
                 break
 
 class use_radar(PossibleAction):

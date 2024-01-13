@@ -14,7 +14,6 @@ class Bot:
 
     def __init__(self):
         self.priority_queue.append(recharge_shields(self))
-        self.priority_queue.append(recharge_turrets(self))
         self.priority_queue.append(shoot(self))
         self.priority_queue.append(use_radar(self))
 
