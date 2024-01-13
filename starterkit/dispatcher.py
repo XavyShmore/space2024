@@ -1,10 +1,11 @@
 from typing import List
 
-from starterkit.actions_possibles import recharge_shields
+from starterkit.actions_possibles import recharge_shields, PossibleAction, shoot
 from starterkit.crewmate import Crewmate
-from starterkit.game_message import CrewDistance, GameMessage
+from starterkit.game_message import CrewDistance, GameMessage, TurretStation
 from starterkit.orders.order_shield import OrderShield
 from starterkit.station_enum import StationEnum
+from starterkit.type_of_target import TypeOfTarget
 
 
 class Dispatcher:
@@ -12,11 +13,15 @@ class Dispatcher:
         self._crewmates = crewmates
         self.game_message: GameMessage = None
         self.usID = self.game_message.currentTeamId
+        self.dispatch_orders = {}
+        self.turrets:List[TurretStation] = self.game_message.ships[self.usID].stations.turrets
 
-    def dispatch(self, priorities, game_message):
-        dispatch_orders = {}
+    def update(self, priorities: List[PossibleAction], game_message):
         self.game_message: GameMessage = game_message
+        self.turrets:List[TurretStation] = self.game_message.ships[self.usID].stations.turrets
+        self.dispatch(priorities, game_message)
 
+    def dispatch(self, priorities: List[PossibleAction], game_message):
         # Get Priority
         priority = next(iter(priorities), None)
 
@@ -26,20 +31,22 @@ class Dispatcher:
         if isinstance(priority, recharge_shields):
             npc, station = self.get_nearest_npc_and_station(StationEnum.SHIELDS)
             npc.set_order(OrderShield(station))
+            self.dispatch_orders[npc] = priority
+
+        if isinstance(priority, shoot):
+            turret:TurretStation = self.get_nearest_npc_and_station(StationEnum.TURRETS)
+
+
+
 
     def get_npc(self, dispatch_orders):
         for npc in self._crewmates:
-            if self.is_free(npc, dispatch_orders):
+            if self.is_free(npc):
                 return npc
         return self._crewmates[0]
 
-    @staticmethod
-    def is_free(npc, dispatch_orders):
-        return npc.current_order is None and npc not in dispatch_orders
-
-    def everyone_on_shield(self):
-        for npc in self._crewmates:
-            npc.set_order(OrderShield())
+    def is_free(self, npc: Crewmate):
+        return npc.current_order is None and npc not in self.dispatch_orders.keys()
 
     def get_nearest_npc_and_station(self, stationEnum):
         near_npc: Crewmate = None
@@ -63,6 +70,23 @@ class Dispatcher:
             if station.distance < near.distance:
                 near = station
         return near
+
+    def get_optimal_turret(self, prio:shoot):
+        if prio.targetType is TypeOfTarget.SHIP:
+            if(self.target_has_lot_of_shield(prio.targetID)):
+                pass
+
+
+
+
+    def has_turretType(self, TurretType):
+        for station in self.turrets:
+            if station.turretType == TurretType:
+                return True
+        return False
+
+    def target_has_lot_of_shield(self, targetID):
+        self.game_message[]
 
     def get_station_from_id(self, id, stationType):
         if stationType == StationEnum.SHIELDS:
