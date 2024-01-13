@@ -4,6 +4,7 @@ from starterkit.orders.order import Order
 from starterkit.orders.order_fire import OrderFire
 from starterkit.orders.order_scan import OrderScan
 from starterkit.orders.order_shield import OrderShield
+from starterkit.type_of_action import TypeOfAction
 
 
 class DispatcherV2:
@@ -15,13 +16,13 @@ class DispatcherV2:
         self.crewmates = crewmates
 
     def map_order(self, possible_order: PossibleAction) -> Order:
-        if isinstance(possible_order, recharge_shields):
+        if possible_order.type_of_action == TypeOfAction.RECHARGE_SHIELD:
             return OrderShield(self.game_message.ships[self.game_message.currentTeamId].stations.shields[0])
-        elif isinstance(possible_order, recharge_turrets):
-            return OrderFire(self.game_message.ships[self.game_message.currentTeamId].stations.turrets[0], self.game_message.ships[self.game_message.currentTeamId].position)
-        elif isinstance(possible_order, shoot):
-            return OrderFire(self.game_message.ships[self.game_message.currentTeamId].stations.turrets[0], self.game_message.ships[self.game_message.currentTeamId].position)
-        elif isinstance(possible_order, use_radar):
+        elif possible_order.type_of_action == TypeOfAction.RECHARGE_TURRET:
+            return OrderFire(self.game_message.ships[self.game_message.currentTeamId].stations.turrets[0], self.game_message.ships[possible_order.targetID].worldPosition)
+        elif possible_order.type_of_action == TypeOfAction.SHOOT:
+            return OrderFire(self.game_message.ships[self.game_message.currentTeamId].stations.turrets[0], self.game_message.ships[possible_order.targetID].worldPosition)
+        elif possible_order.type_of_action == TypeOfAction.USE_RADAR:
             return OrderScan(self.game_message.ships[self.game_message.currentTeamId].stations.radars[0])
         return OrderShield(self.game_message.ships[self.game_message.currentTeamId].stations.shields[0])
 
@@ -34,8 +35,8 @@ class DispatcherV2:
             order = self.map_order(priority_list[-1 - i])
             if order is not None:
                 crewmate.set_order(order)
+                print(order)
                 action = crewmate.do()
-                print(action)
                 if action is not None:
                     actions.append(action)
         return actions

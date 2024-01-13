@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 import math
+from type_of_action import TypeOfAction
+
 
 class PossibleAction(ABC):
     priority = 0
@@ -16,7 +18,7 @@ class PossibleAction(ABC):
 
 class recharge_shields(PossibleAction):
     priority = 0
-    type_of_action = "recharge_shields"
+    type_of_action = TypeOfAction.RECHARGE_SHIELD
 
     def __init__(self, bot):
         self.bot = bot
@@ -40,7 +42,7 @@ class recharge_shields(PossibleAction):
 
 class recharge_turrets(PossibleAction):
     priority = 0
-    type_of_action = "recharge_turrets"
+    type_of_action = TypeOfAction.RECHARGE_TURRET
 
     def __init__(self, bot):
         self.bot = bot
@@ -53,7 +55,7 @@ class recharge_turrets(PossibleAction):
 
 class shoot(PossibleAction):
     priority = 0
-    type_of_action = "shoot"
+    type_of_action = TypeOfAction.SHOOT
     targetID = None
     targetType = None
 
@@ -119,7 +121,7 @@ class shoot(PossibleAction):
 
 class use_radar(PossibleAction):
     priority = 0
-    type_of_action = "use_radar"
+    type_of_action = TypeOfAction.USE_RADAR
 
     def __init__(self, bot):
         self.bot = bot
