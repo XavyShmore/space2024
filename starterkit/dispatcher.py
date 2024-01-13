@@ -13,13 +13,14 @@ class Dispatcher:
     def __init__(self):
         self._crewmates = []
         self.game_message: GameMessage = None
-        self.usID = self.game_message.currentTeamId
+        # self.usID = self.game_message.currentTeamId
         self.dispatch_orders = {}
-        self.turrets:List[TurretStation] = self.game_message.ships[self.usID].stations.turrets
+        # self.turrets:List[TurretStation] = self.game_message.ships[self.usID].stations.turrets
 
     def update(self, priorities: List[PossibleAction], game_message):
         self.game_message: GameMessage = game_message
-        self.turrets:List[TurretStation] = self.game_message.ships[self.usID].stations.turrets
+        self.usID = self.game_message.currentTeamId
+        self.turrets: List[TurretStation] = self.game_message.ships[self.usID].stations.turrets
         self.dispatch(priorities, game_message)
 
     def dispatch(self, priorities: List[PossibleAction], game_message):

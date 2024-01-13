@@ -11,12 +11,12 @@ class Crewmate:
 
     def get_distance_from_stations(self, station_enum: StationEnum) -> list:
         if station_enum == StationEnum.TURRETS:
-            return self.current_order["distanceFromStations"]["turrets"]
+            return self.crew_member.distanceFromStations.turrets
         elif station_enum == StationEnum.SHIELDS:
-            return self.current_order["distanceFromStations"]["shields"]
+            return self.crew_member.distanceFromStations.shields
         elif station_enum == StationEnum.RADARS:
-            return self.current_order["distanceFromStations"]["radars"]
-        return self.current_order["distanceFromStations"]["helms"]
+            return self.crew_member.distanceFromStations.radars
+        return self.crew_member.distanceFromStations.helms
 
     def set_order(self, order: Order):
         self.current_order = order
@@ -24,7 +24,6 @@ class Crewmate:
 
     def has_action(self) -> bool:
         return self.current_order is not None
-
 
     def do(self):
         if self.crew_member.gridPosition.x != self.current_order.station.gridPosition.x and \
