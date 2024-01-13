@@ -25,6 +25,8 @@ class Dispatcher:
 
     def dispatch(self, priorities: List[PossibleAction], game_message):
 
+        print(priorities.count)
+
         for priority in priorities:
             if isinstance(priority, recharge_shields):
                 npc, station = self.get_nearest_npc_and_station(StationEnum.SHIELDS)
@@ -32,6 +34,18 @@ class Dispatcher:
                 self.dispatch_orders[npc] = priority
 
             if isinstance(priority, shoot):
+                npc, turret = self.get_nearest_npc_and_station(StationEnum.TURRETS)
+
+                if priority.targetType == TypeOfTarget.SHIP:
+                    npc.set_order(OrderFire(turret,
+                                            self.game_message.ships[priority.targetID].worldPosition))
+                else:
+                    for d in self.game_message.debris:
+                        if d.id == priority.targetID:
+                            npc.set_order(OrderFire(turret,
+                                                    self.game_message.debris[priority.targetID].position))
+        for npc in self._crewmates:
+            if self.is_free(npc):
                 npc, turret = self.get_nearest_npc_and_station(StationEnum.TURRETS)
 
                 if priority.targetType == TypeOfTarget.SHIP:
