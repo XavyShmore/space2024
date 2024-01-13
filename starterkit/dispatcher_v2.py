@@ -15,19 +15,27 @@ class DispatcherV2:
         self.crewmates = crewmates
 
     def map_order(self, possible_order: PossibleAction) -> Order:
-        if possible_order is isinstance(recharge_shields):
-            return OrderShield(self.game_message.ships[self.game_message.currentTeamId].stations["shields"])
-        elif possible_order is isinstance(recharge_turrets):
-            return OrderFire(self.game_message.ships[self.game_message.currentTeamId].stations["turrets"], self.game_message.ships[self.game_message.currentTeamId].position)
-        elif possible_order is isinstance(shoot):
-            return OrderFire(self.game_message.ships[self.game_message.currentTeamId].stations["turrets"], self.game_message.ships[self.game_message.currentTeamId].position)
-        elif possible_order is isinstance(use_radar):
-            return OrderScan(self.game_message.ships[self.game_message.currentTeamId].stations["radars"])
+        if isinstance(possible_order, recharge_shields):
+            return OrderShield(self.game_message.ships[self.game_message.currentTeamId].stations.shields[0])
+        elif isinstance(possible_order, recharge_turrets):
+            return OrderFire(self.game_message.ships[self.game_message.currentTeamId].stations.turrets[0], self.game_message.ships[self.game_message.currentTeamId].position)
+        elif isinstance(possible_order, shoot):
+            return OrderFire(self.game_message.ships[self.game_message.currentTeamId].stations.turrets[0], self.game_message.ships[self.game_message.currentTeamId].position)
+        elif isinstance(possible_order, use_radar):
+            return OrderScan(self.game_message.ships[self.game_message.currentTeamId].stations.radars[0])
+        return OrderShield(self.game_message.ships[self.game_message.currentTeamId].stations.shields[0])
 
     def update(self, game_message: GameMessage):
         self.game_message = game_message
 
-    def do(self, priority_list: list):
+    def do(self, priority_list: list) -> []:
+        actions = []
         for i, crewmate in enumerate(self.crewmates):
-            order = priority_list[-1 - i]
-            crewmate.set_order(order)
+            order = self.map_order(priority_list[-1 - i])
+            if order is not None:
+                crewmate.set_order(order)
+                action = crewmate.do()
+                print(action)
+                if action is not None:
+                    actions.append(action)
+        return actions

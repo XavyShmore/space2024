@@ -1,7 +1,7 @@
-from starterkit.orders.order import Order
-from starterkit.game_message import CrewMember
-from starterkit.actions import CrewMoveAction
-from starterkit.station_enum import StationEnum
+from orders.order import Order
+from game_message import CrewMember
+from actions import CrewMoveAction
+from station_enum import StationEnum
 
 
 class Crewmate:
@@ -17,7 +17,6 @@ class Crewmate:
         elif station_enum == StationEnum.RADARS:
             return self.current_order["distanceFromStations"]["radars"]
         return self.current_order["distanceFromStations"]["helms"]
-
 
     def set_order(self, order: Order):
         self.current_order = order
