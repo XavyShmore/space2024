@@ -1,11 +1,10 @@
-from starterkit.actions_possibles import PossibleAction
-from starterkit.game_message import GameMessage
-from starterkit.orders.order import Order
-from starterkit.orders.order_fire import OrderFire
-from starterkit.orders.order_scan import OrderScan
-from starterkit.orders.order_shield import OrderShield
-from starterkit.type_of_action import TypeOfAction
-from starterkit.type_of_target import TypeOfTarget
+from actions_possibles import PossibleAction, recharge_shields, shoot, use_radar
+from game_message import GameMessage
+from orders.order import Order
+from orders.order_fire import OrderFire
+from orders.order_scan import OrderScan
+from orders.order_shield import OrderShield
+from type_of_action import TypeOfAction
 
 
 class DispatcherV2:
