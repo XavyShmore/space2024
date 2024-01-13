@@ -8,6 +8,9 @@ class PossibleAction(ABC):
     priority = 0
     type_of_action = None
 
+    def __init__(self, bot):
+        self.bot = bot
+
     @abstractmethod
     def do_action(self):
         pass
@@ -21,8 +24,6 @@ class recharge_shields(PossibleAction):
     priority = 0
     type_of_action = TypeOfAction.RECHARGE_SHIELD
 
-    def __init__(self, bot):
-        self.bot = bot
     
     def do_action(self):
         pass
@@ -47,9 +48,6 @@ class shoot(PossibleAction):
     type_of_action = TypeOfAction.SHOOT
     targetID = None
     targetType = None
-
-    def __init__(self, bot):
-        self.bot = bot
     
     def do_action(self):
         pass
@@ -97,28 +95,31 @@ class shoot(PossibleAction):
                 self.priority = 45
                 break
 
-
-
-
         for ship in game_message.ships:
             #print(ship)
             #print(game_message.currentTeamId)
             if ship != game_message.currentTeamId:
-                self.targetID = ship
-                self.targetType = TypeOfTarget.SHIP
-                self.priority = 40
-                break
+                if ship in self.bot.still_alive_players_set:
+                    self.targetID = ship
+                    self.targetType = TypeOfTarget.SHIP
+                    self.priority = 40
+                    break
 
 class use_radar(PossibleAction):
     priority = 0
     type_of_action = TypeOfAction.USE_RADAR
 
-    def __init__(self, bot):
-        self.bot = bot
-    
+    PRIORITY_SLOPE = 0.8
+
+    MAX_PRIORITY = 40
+
     def do_action(self):
         pass
     def update_priority(self, game_message):
-        self.priority = 20
+        if self.bot.last_tick_the_radar_was_used < game_message.currentTickNumber:
+            self.priority += self.PRIORITY_SLOPE
+        if self.priority > self.MAX_PRIORITY:
+            self.priority = self.MAX_PRIORITY
+        
 
 
