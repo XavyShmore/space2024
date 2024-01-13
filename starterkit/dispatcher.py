@@ -1,9 +1,11 @@
 from typing import List
 
-from  actions_possibles import recharge_shields
+from actions_possibles import recharge_shields, shoot, PossibleAction
 from  crewmate import Crewmate
-from  game_message import CrewDistance, GameMessage
+from game_message import CrewDistance, GameMessage, TurretStation
 from  orders.order_shield import OrderShield
+from starterkit.orders.order_fire import OrderFire
+from starterkit.type_of_target import TypeOfTarget
 from  station_enum import StationEnum
 
 
@@ -43,7 +45,7 @@ class Dispatcher:
                     if d.id == priority.targetID:
                         npc.set_order(OrderFire(turret,
                                          self.game_message.debris[priority.targetID].position))
-            if
+            
 
     def get_npc(self, dispatch_orders):
         for npc in self._crewmates:
