@@ -4,7 +4,7 @@ import random
 from actions_possibles import *
 from crewmate import Crewmate
 from dispatcher_v2 import DispatcherV2
-from starterkit.dispatcher import Dispatcher
+#from dispatcher import Dispatcher
 
 
 class Bot:
